@@ -1,4 +1,5 @@
 import requests  # Import the requests library to handle HTTP requests
+import json # Import the json library... for json lol
 
 # Define a function named emotion_detector that takes a string input (text_to_analyse)
 def emotion_detector( text_to_analyse ):
@@ -14,5 +15,9 @@ def emotion_detector( text_to_analyse ):
     myobj = { "raw_document": { "text": text_to_analyse } }
     # Send a POST request to the API with the text and headers
     response = requests.post(url, json = myobj, headers=headers)
+    # get emotion from response
+    emotion = json.loads( response.text )['emotionPredictions'][0]['emotion']
+    # get dominant emotion
+    emotion["dominant_emotion"] = max(emotion, key = emotion.get )
     # Return the response text from the API
-    return response.text
+    return emotion
